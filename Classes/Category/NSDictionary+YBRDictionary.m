@@ -70,7 +70,7 @@
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dict options:NSJSONWritingPrettyPrinted error:&error];
     NSString *jsonString;
     if (!jsonData) {
-        NSSLog(@"%@",error);
+        NSLog(@"%@",error);
     }else{
         jsonString = [[NSString alloc]initWithData:jsonData encoding:NSUTF8StringEncoding];
     }
