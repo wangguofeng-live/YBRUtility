@@ -24,11 +24,7 @@
 
 + (NSString*)noNullString:(NSString*)sender
 {
-    if (sender) {
-        return sender;
-    }else{
-        return @"";
-    }
+    return sender ?: @"";
 }
 
 /**
@@ -62,39 +58,19 @@
 #pragma mark - string size
 @implementation NSString (StringSize)
 
-//- (CGSize)GetControlRectWithWidth:(CGFloat)argRectWidth
-//                    lineSpacing:(CGFloat)argSpacing
-//                     withAttributedString:(NSAttributedString *)strAttributedString
-//                             font:(int)argFont
-//{
-//    NSTextStorage *textStorage = [[NSTextStorage alloc] init];
-//    NSLayoutManager *layoutManager = [[NSLayoutManager alloc] init];
-//    [textStorage addLayoutManager:layoutManager];
-//    NSTextContainer *textContainer = [[NSTextContainer alloc] initWithSize:CGSizeMake(argRectWidth, FLT_MAX)];
-//    [textContainer setLineFragmentPadding:argSpacing];
-//    [layoutManager addTextContainer:textContainer];
-//    [textStorage setAttributedString:strAttributedString];
-//    [layoutManager ensureLayoutForTextContainer:textContainer];
-//    CGRect frame = [layoutManager usedRectForTextContainer:textContainer];
-//    return frame.size;
-//}
-
 + (CGSize)GetControlSizewithWidth:(CGFloat)p_SizeWidth
                       lineSpacing:(CGFloat)argSpacing
                        withString:(NSString *)str_textString
-                         withFont:(int)n_Font
+                         withFont:(UIFont *)font
 {
     if (str_textString){
         CGSize p_Constraint = CGSizeMake(p_SizeWidth, 20000.0f);
         NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
         paragraphStyle.lineSpacing = argSpacing;// 字体的行间距
         NSDictionary *dic_attributes = @{
-                                         
-                                         NSFontAttributeName:YBRRegularFont(n_Font),
-                                         
-                                         NSParagraphStyleAttributeName:paragraphStyle
-                                         
-                                         };
+            NSFontAttributeName:font,
+            NSParagraphStyleAttributeName:paragraphStyle
+        };
         NSAttributedString *str_attributedText = [[NSAttributedString alloc] initWithString:str_textString attributes:dic_attributes];
         CGRect p_Rect = [str_attributedText boundingRectWithSize:p_Constraint options:NSStringDrawingUsesLineFragmentOrigin|NSStringDrawingUsesFontLeading context:nil];
         return p_Rect.size;
@@ -105,18 +81,15 @@
 
 + (CGSize)GetControlSizewithWidth:(CGFloat)p_SizeWidth
                        withString:(NSString *)str_textString
-                         withFont:(int)n_Font {
+                         withFont:(nonnull UIFont *)font {
     if (str_textString){
         CGSize p_Constraint = CGSizeMake(p_SizeWidth, 20000.0f);
         NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
         paragraphStyle.lineSpacing = 5;// 字体的行间距
         NSDictionary *dic_attributes = @{
-                                     
-                                     NSFontAttributeName:YBRRegularFont(n_Font),
-                                     
-                                     NSParagraphStyleAttributeName:paragraphStyle
-                                     
-                                     };
+            NSFontAttributeName:font,
+            NSParagraphStyleAttributeName:paragraphStyle
+        };
         NSAttributedString *str_attributedText = [[NSAttributedString alloc] initWithString:str_textString attributes:dic_attributes];
         CGRect p_Rect = [str_attributedText boundingRectWithSize:p_Constraint options:NSStringDrawingUsesLineFragmentOrigin context:nil];
         return p_Rect.size;
@@ -127,36 +100,16 @@
 
 + (CGSize)GetControlNoLineSpacingSizewithWidth:(CGFloat)p_SizeWidth
                                     withString:(NSString *)str_textString
-                                      withFont:(int)n_Font
+                                      withFont:(nonnull UIFont *)font
 {
     if (str_textString){
         CGSize p_Constraint = CGSizeMake(p_SizeWidth, 20000.0f);
         NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
         NSDictionary *dic_attributes = @{
-                                         
-                                         NSFontAttributeName:YBRRegularFont(n_Font),
-                                         
-                                         NSParagraphStyleAttributeName:paragraphStyle
-                                         
-                                         };
+            NSFontAttributeName:font,
+            NSParagraphStyleAttributeName:paragraphStyle
+        };
         NSAttributedString *str_attributedText = [[NSAttributedString alloc] initWithString:str_textString attributes:dic_attributes];
-        CGRect p_Rect = [str_attributedText boundingRectWithSize:p_Constraint options:NSStringDrawingUsesLineFragmentOrigin context:nil];
-        return p_Rect.size;
-    }
-    else
-        return CGSizeZero;
-}
-+ (CGSize)GetControlSizewithWidth:(CGFloat)p_SizeWidth
-                       withHtmlString:(NSString *)strHtmlString
-                         withFont:(int)n_Font
-{
-    if (strHtmlString){
-        CGSize p_Constraint = CGSizeMake(p_SizeWidth, 20000.0f);
-        NSData* pHtmlData = [strHtmlString dataUsingEncoding:NSUnicodeStringEncoding];
-        NSAttributedString * str_attributedText = [[NSAttributedString alloc] initWithData:pHtmlData
-                                                                                   options:@{ NSDocumentTypeDocumentAttribute: NSHTMLTextDocumentType }
-                                                                        documentAttributes:nil
-                                                                                     error:nil];
         CGRect p_Rect = [str_attributedText boundingRectWithSize:p_Constraint options:NSStringDrawingUsesLineFragmentOrigin context:nil];
         return p_Rect.size;
     }
@@ -166,11 +119,13 @@
 
 + (CGSize)GetControlSizewithNoLineSpacing:(CGFloat)p_SizeWidth
                                withString:(NSString *)str_textString
-                                 withFont:(int)n_Font
+                                 withFont:(nonnull UIFont *)font
 {
     if (str_textString){
         CGSize p_Constraint = CGSizeMake(p_SizeWidth, 20000.0f);
-        NSDictionary *dic_attributes = [NSDictionary dictionaryWithObjectsAndKeys:YBRRegularFont(n_Font),NSFontAttributeName, nil];
+        NSDictionary *dic_attributes = @{
+            NSFontAttributeName:font
+        };
         if ([str_textString isKindOfClass:[NSNull class]]) {
             str_textString = @"";
         }
@@ -229,3 +184,4 @@
 }
 
 @end
+
