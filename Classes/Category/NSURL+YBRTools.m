@@ -7,6 +7,7 @@
 //
 
 #import "NSURL+YBRTools.h"
+#import <objc/runtime.h>
 
 @implementation NSURL (YBRTools)
 
