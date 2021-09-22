@@ -9,10 +9,6 @@
 #import <Foundation/Foundation.h>
 
 NS_ASSUME_NONNULL_BEGIN
- 
- __attribute__ ((weak)) UIFont* YBRRegularFont(int fontSize) {
-    return [UIFont systemFontOfSize:fontSize];
-}
 
 @interface NSString (Helper)
 
@@ -40,29 +36,20 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (CGSize)GetControlSizewithWidth:(CGFloat)p_SizeWidth
                        withString:(NSString *)str_textString
-                         withFont:(int)n_Font;
-
-+ (CGSize)GetControlSizewithWidth:(CGFloat)p_SizeWidth
-                   withHtmlString:(NSString *)strHtmlString
-                         withFont:(int)n_Font;
+                         withFont:(UIFont *)font;
 
 + (CGSize)GetControlSizewithWidth:(CGFloat)p_SizeWidth
                       lineSpacing:(CGFloat)argSpacing
                        withString:(NSString *)str_textString
-                         withFont:(int)n_Font;
-
-//- (CGSize)GetControlRectWithWidth:(CGFloat)argRectWidth
-//                      lineSpacing:(CGFloat)argSpacing
-//             withAttributedString:(NSAttributedString *)strAttributedString
-//                             font:(int)argFont;
+                         withFont:(UIFont *)font;
 
 + (CGSize)GetControlSizewithNoLineSpacing:(CGFloat)p_SizeWidth
                                withString:(NSString *)str_textString
-                                 withFont:(int)n_Font;
+                                 withFont:(UIFont *)font;
 
 + (CGSize)GetControlNoLineSpacingSizewithWidth:(CGFloat)p_SizeWidth
                                     withString:(NSString *)str_textString
-                                      withFont:(int)n_Font;
+                                      withFont:(UIFont *)font;
 
 @end
 
