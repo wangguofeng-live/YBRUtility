@@ -20,6 +20,34 @@
 || ([_object respondsToSelector:@selector(length)] && [(NSData *)_object length] == 0) \
 || ([_object respondsToSelector:@selector(count)] && [(NSArray *)_object count] == 0))
 
+///是否为空
+#define IsNotNilOrNull(obj) (obj && ![obj isEqual:[NSNull null]])
+///字符串是否为空
+#define IsNotNilOrNullOrEmpty(obj) (IsNotNilOrNull(obj) && ![obj isEqual:@""])
+
+//数组是否为空
+#define YBR_ARRAY_IS_EMPTY(array) (array == nil || [array isKindOfClass:[NSNull class]] || array.count == 0)
+///是否是数组，并且不为空
+#define YBR_ARRAY_IS_NOT_EMPTY(array) (array && [array isKindOfClass:[NSArray class]] && ((NSArray *)array).count > 0)
+//字典是否为空
+#define YBR_DICT_IS_EMPTY(dic) (dic == nil || [dic isKindOfClass:[NSNull class]] || dic.allKeys.count == 0)
+///是否是字典，并且不为空
+#define YBR_DICT_IS_NOT_EMPTY(dic) (dic && [dic isKindOfClass:[NSDictionary class]] && ((NSDictionary *)dic).allKeys.count > 0)
+//字符串为空
+#define YBR_STR_IS_EMPTY(str) (str == nil || [str isKindOfClass:[NSNull class]] || [str isEqual:@""])
+//字符串不为空
+#define YBR_STR_IS(str) (str && ![str isKindOfClass:[NSNull class]] && ![str isEqualToString:@""])
+///是否是字符串
+#define YBR_IS_STR(str) (str && [str isKindOfClass:[NSString class]])
+///是否是数组，并且不为空
+#define YBR_ARRAY_IS(array) YBR_ARRAY_IS_NOT_EMPTY(array)
+///是否是字典，并且不为空
+#define YBR_DICT_IS(dic) YBR_DICT_IS_NOT_EMPTY(dic)
+///是否是数组
+#define YBR_IS_ARRAY(array) (array && [array isKindOfClass:[NSArray class]])
+///是否是字典
+#define YBR_IS_DICT(dic) (dic && [dic isKindOfClass:[NSDictionary class]])
+
 //获取屏幕宽度与高度
 #define kScreenWidth \
 ([[UIScreen mainScreen] respondsToSelector:@selector(nativeBounds)] ? [UIScreen mainScreen].nativeBounds.size.width/[UIScreen mainScreen].nativeScale : [UIScreen mainScreen].bounds.size.width)
@@ -27,6 +55,32 @@
 ([[UIScreen mainScreen] respondsToSelector:@selector(nativeBounds)] ? [UIScreen mainScreen].nativeBounds.size.height/[UIScreen mainScreen].nativeScale : [UIScreen mainScreen].bounds.size.height)
 #define kScreenSize \
 ([[UIScreen mainScreen] respondsToSelector:@selector(nativeBounds)] ? CGSizeMake([UIScreen mainScreen].nativeBounds.size.width/[UIScreen mainScreen].nativeScale,[UIScreen mainScreen].nativeBounds.size.height/[UIScreen mainScreen].nativeScale) : [UIScreen mainScreen].bounds.size)
+
+#define kIsNotchScreen \
+({\
+BOOL result = NO;\
+if (UIDevice.currentDevice.userInterfaceIdiom == UIUserInterfaceIdiomPhone) {\
+    if (@available(iOS 11.0, *)) {\
+        UIWindow *mainWindow = [[[UIApplication sharedApplication] delegate] window];\
+        if (mainWindow.safeAreaInsets.bottom > 0.0) {\
+            result = YES;\
+        }\
+    }\
+}\
+result;\
+})
+
+#define YBRAnimationDuration 0.3
+#define YBRUI_SCALE (kScreenWidth / 414.0f)
+
+#define YBRTopHeight (kIsNotchScreen ? 88 : 64)
+#define YBRStatusBarHeight (kIsNotchScreen ? 44 : 20)
+#define YBRStatusFooterBarHeight (kIsNotchScreen ? 34 : 0)
+
+#define YBRFootBarHeight (kIsNotchScreen ? 20 : 0)
+#define YBRFootHeight (kIsNotchScreen ? 69 : 49)
+#define TABBAR_HEIGHT (kIsNotchScreen ? 100 : 80)
+#define YBRAutoFootHeight (kIsNotchScreen ? 75 : 55)
 
 //一些缩写
 #define kApplication        [UIApplication sharedApplication]
@@ -95,6 +149,9 @@ blue:((float)(rgbValue & 0xFF)) / 255.0 alpha:1.0]
 //获取一段时间间隔
 #define kStartTime CFAbsoluteTime start = CFAbsoluteTimeGetCurrent();
 #define kEndTime   NSLog(@"Time: %f", CFAbsoluteTimeGetCurrent() - start)
+
+#define CGSizeOne CGSizeMake(1, 1)
+#define ccr(_x_,_y_,_w_,_h_)  CGRectMake(_x_,_y_,_w_,_h_)
 
 //单例宏
 #undef    AS_SINGLETON
