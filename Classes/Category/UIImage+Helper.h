@@ -29,6 +29,15 @@ NS_ASSUME_NONNULL_BEGIN
 - (UIImage *)imageWithColor:(UIColor *)color;
 
 
+/**
+ 传入需要的占位图尺寸 获取占位图
+
+ @param size 需要的站位图尺寸
+ @return 占位图
+ */
++ (UIImage *)scaleToSizeWithImage:(UIImage *)img
+                    imageViewSize:(CGSize)size;
+
 @end
 
 NS_ASSUME_NONNULL_END
