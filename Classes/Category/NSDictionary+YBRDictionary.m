@@ -7,11 +7,7 @@
 //
 
 #import "NSDictionary+YBRDictionary.h"
-
-///是否是数组
-#define YBR_IS_ARRAY(array) (array && [array isKindOfClass:[NSArray class]])
-///是否是字典
-#define YBR_IS_DICT(dic) (dic && [dic isKindOfClass:[NSDictionary class]])
+#import "YBRToolsMacro.h"
 
 @implementation NSDictionary (YBRDictionary)
 - (id)objectForKeyCheckStr:(id)aKey

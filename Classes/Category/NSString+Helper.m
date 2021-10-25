@@ -37,6 +37,22 @@
     [pPasteboard setString:argPasteboard];
 }
 
+//判断手机号码格式是否正确
++ (BOOL)judgeMobile:(NSString *)mobile
+{
+    if (!mobile) {
+        return NO;
+    }
+    mobile = [mobile stringByReplacingOccurrencesOfString:@" " withString:@""];
+    if (mobile.length != 11)
+    {
+        return NO;
+    }else
+    {
+        return YES;
+    }
+}
+
 @end
 
 

@@ -72,6 +72,7 @@ result;\
 
 #define YBRAnimationDuration 0.3
 #define YBRUI_SCALE (kScreenWidth / 414.0f)
+#define YBRUI_SCALE_375 (kScreenWidth / 375.0f)
 
 #define YBRTopHeight (kIsNotchScreen ? 88 : 64)
 #define YBRStatusBarHeight (kIsNotchScreen ? 44 : 20)
@@ -81,6 +82,8 @@ result;\
 #define YBRFootHeight (kIsNotchScreen ? 69 : 49)
 #define TABBAR_HEIGHT (kIsNotchScreen ? 100 : 80)
 #define YBRAutoFootHeight (kIsNotchScreen ? 75 : 55)
+
+#define YBR_IMAGE(imageName) [UIImage imageNamed:[NSString stringWithFormat:@"%@",imageName]]
 
 //一些缩写
 #define kApplication        [UIApplication sharedApplication]

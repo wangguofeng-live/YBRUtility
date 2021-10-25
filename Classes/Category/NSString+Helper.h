@@ -23,6 +23,9 @@ NS_ASSUME_NONNULL_BEGIN
  */
 + (void)Pasteboard:(NSString*)argPasteboard;
 
+//判断手机号码格式是否正确
++ (BOOL)judgeMobile:(NSString *)mobile;
+
 @end
 
 @interface NSString (CheckNumber)
