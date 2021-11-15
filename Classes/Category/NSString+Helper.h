@@ -26,6 +26,11 @@ NS_ASSUME_NONNULL_BEGIN
 //判断手机号码格式是否正确
 + (BOOL)judgeMobile:(NSString *)mobile;
 
+/**
+ @brief 判断银行卡号是否正确
+ */
++ (BOOL)checkCardNo:(NSString*) cardNo;
+
 @end
 
 @interface NSString (CheckNumber)
