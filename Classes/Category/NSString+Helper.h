@@ -31,6 +31,9 @@ NS_ASSUME_NONNULL_BEGIN
  */
 + (BOOL)checkCardNo:(NSString*) cardNo;
 
+///判断是否有系统表情
++ (BOOL)stringContainsEmoji:(NSString * _Nullable)string;
+
 @end
 
 @interface NSString (CheckNumber)
