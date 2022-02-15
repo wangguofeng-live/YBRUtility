@@ -10,6 +10,15 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+extern UIImage* getMainBundleImage(NSString *imageName);
+extern UIImage* getMainBundleImageOfFile(NSString *imageName);
+
+
+extern UIImage* getImageOfFile(NSString *filePath);
+extern UIImage* getImageInBundleOfFileType(NSBundle *bundle, NSString *imageName, NSString *fileType);
+extern UIImage* getImageInBundleOfFile(NSBundle *bundle, NSString *imageName);
+extern UIImage* getImageInBundleNameOfFile(NSString *bundleName, NSString *imageName);
+
 @interface UIImage (Helper)
 
 - (UIImage*)ninePointImageWithTopScale:(float)argTop

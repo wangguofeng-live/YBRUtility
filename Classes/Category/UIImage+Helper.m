@@ -8,6 +8,38 @@
 
 #import "UIImage+Helper.h"
 
+UIImage* getMainBundleImage(NSString *imageName) {
+    return [UIImage imageNamed:imageName];
+}
+
+UIImage* getMainBundleImageOfFile(NSString *imageName) {
+    return [[NSBundle mainBundle].resourcePath stringByAppendingPathComponent:imageName];
+}
+
+NSString* getMainBundleImagePathOfFile(NSString *fileName) {
+    return [[NSBundle mainBundle].resourcePath stringByAppendingPathComponent:fileName];
+}
+
+UIImage* getImageOfFile(NSString *filePath) {
+    return [UIImage imageWithContentsOfFile:filePath];
+}
+
+UIImage* getImageInBundleOfFile(NSBundle *bundle, NSString *imageName) {
+    return getImageOfFile([bundle.resourcePath stringByAppendingPathComponent:imageName]);
+}
+
+UIImage* getImageInBundleOfFileType(NSBundle *bundle, NSString *imageName, NSString *fileType) {
+    return getImageOfFile([bundle.resourcePath stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.%@",imageName, fileType]]);
+}
+
+UIImage* getImageInBundleNameOfFile(NSString *bundleName, NSString *imageName) {
+    
+    NSBundle *bundle = [NSBundle bundleWithPath:[[NSBundle mainBundle] pathForResource:bundleName ofType:@"bundle"]];
+    
+    return getImageOfFile([bundle.resourcePath stringByAppendingPathComponent:imageName]);
+}
+
+
 @implementation UIImage (Helper)
 
 /**
@@ -19,7 +51,7 @@
     UIImage *pPointImage = nil;
     CGFloat imageWidth  = self.size.width;
     CGFloat imageHeight = self.size.height;
-
+    
     /// 四个内边距合成中间的方形，方形区域向四方拉伸
     UIEdgeInsets insets = UIEdgeInsetsMake(imageHeight*argTop, imageWidth*argLeft, imageHeight*argTop-1, imageWidth*argLeft-1);
     pPointImage = [self resizableImageWithCapInsets:insets resizingMode:UIImageResizingModeStretch];

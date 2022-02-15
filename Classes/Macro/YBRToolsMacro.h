@@ -83,7 +83,35 @@ result;\
 #define TABBAR_HEIGHT (kIsNotchScreen ? 100 : 80)
 #define YBRAutoFootHeight (kIsNotchScreen ? 75 : 55)
 
-#define YBR_IMAGE(imageName) [UIImage imageNamed:[NSString stringWithFormat:@"%@",imageName]]
+//image
+//#define kImageOfName(imageName) [UIImage imageNamed:imageName]
+//#define YBR_IMAGE(imageName) kImageOfName(imageName)
+//
+//#define kMainBundleFilePath(fileName,fileType) [[NSBundle mainBundle] pathForResource:fileName ofType:fileType]
+//
+//#define kImageOfFile(filePath) [UIImage imageWithContentsOfFile:filePath]
+//
+//#define kImageOfFileBundle(bundle,imageName,fileType) kImageOfFile([bundle.resourcePath stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.%@",imageName, fileType]])
+//
+//
+//#define kImageOfFileNameBundle(bundle,imageName) kImageOfFile([bundle.resourcePath stringByAppendingPathComponent:imageName])
+
+
+
+#define kMainBundleImage(fileName,fileType) kImageOfFile(kMainBundleFilePath(fileName,fileType))
+
+//image
+#define kImageOfName(imageName) getMainBundleImage(imageName)
+#define YBR_IMAGE(imageName) kImageOfName(imageName)
+
+#define kImageOfFile(filePath) getImageOfFile(filePath)
+
+#define kImageOfFileBundle(bundle,imageName,fileType) getImageInBundleOfFileType(bundle,imageName,fileType)
+
+#define kImageOfFileNameBundle(bundle,imageName) getImageInBundleOfFile(bundle,imageName)
+
+#define kMainBundleImage(imageName) getMainBundleImageOfFile(imageName)
+
 
 //一些缩写
 #define kApplication        [UIApplication sharedApplication]
