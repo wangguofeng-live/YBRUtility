@@ -97,9 +97,6 @@ result;\
 //#define kImageOfFileNameBundle(bundle,imageName) kImageOfFile([bundle.resourcePath stringByAppendingPathComponent:imageName])
 
 
-
-#define kMainBundleImage(fileName,fileType) kImageOfFile(kMainBundleFilePath(fileName,fileType))
-
 //image
 #define kImageOfName(imageName) getMainBundleImage(imageName)
 #define YBR_IMAGE(imageName) kImageOfName(imageName)
@@ -111,6 +108,7 @@ result;\
 #define kImageOfFileNameBundle(bundle,imageName) getImageInBundleOfFile(bundle,imageName)
 
 #define kMainBundleImage(imageName) getMainBundleImageOfFile(imageName)
+#define kMainBundleImageAndType(fileName,fileType) kImageOfFile(kMainBundleFilePath(fileName,fileType))
 
 
 //一些缩写

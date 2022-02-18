@@ -13,7 +13,7 @@ UIImage* getMainBundleImage(NSString *imageName) {
 }
 
 UIImage* getMainBundleImageOfFile(NSString *imageName) {
-    return [[NSBundle mainBundle].resourcePath stringByAppendingPathComponent:imageName];
+    return getImageInBundleOfFile([NSBundle mainBundle],imageName);
 }
 
 NSString* getMainBundleImagePathOfFile(NSString *fileName) {
