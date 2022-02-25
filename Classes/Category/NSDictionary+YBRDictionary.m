@@ -8,6 +8,7 @@
 
 #import "NSDictionary+YBRDictionary.h"
 #import "YBRToolsMacro.h"
+#import "NSString+Helper.h"
 
 @implementation NSDictionary (YBRDictionary)
 - (id)objectForKeyCheckStr:(id)aKey
@@ -86,6 +87,44 @@
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:array options:NSJSONWritingPrettyPrinted error:&error];
     NSString *jsonString = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
     return jsonString;
+}
+
+@end
+
+
+@implementation NSDictionary (KeyFirstChar)
+
+///转化所有Key的首字母改为大写的 Dic
+- (NSDictionary *)convertToKeyFirstCharUpperDictionary {
+    
+    NSMutableDictionary *dic = [NSMutableDictionary dictionary];
+    for (NSString *key in self.allKeys) {
+        
+        id obj = dic[key];
+        
+        if ([obj isKindOfClass:[NSDictionary class]]) {
+            obj = [((NSDictionary *)obj) convertToKeyFirstCharUpperDictionary];
+        }
+        
+        [dic setObject:obj forKey:[key ybr_firstCharUpper]];
+    }
+    return dic.copy;
+}
+
+///转化所有Key的首字母改为小写的 Dic
+- (NSDictionary *)convertToKeyFirstCharLowerDictionary {
+    NSMutableDictionary *dic = [NSMutableDictionary dictionary];
+    for (NSString *key in self.allKeys) {
+        
+        id obj = dic[key];
+        
+        if ([obj isKindOfClass:[NSDictionary class]]) {
+            obj = [((NSDictionary *)obj) convertToKeyFirstCharLowerDictionary];
+        }
+        
+        [dic setObject:obj forKey:[key ybr_firstCharLower]];
+    }
+    return dic.copy;
 }
 
 @end
