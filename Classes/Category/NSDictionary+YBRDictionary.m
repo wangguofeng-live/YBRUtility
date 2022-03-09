@@ -100,7 +100,7 @@
     NSMutableDictionary *dic = [NSMutableDictionary dictionary];
     for (NSString *key in self.allKeys) {
         
-        id obj = dic[key];
+        id obj = self[key];
         
         if ([obj isKindOfClass:[NSDictionary class]]) {
             obj = [((NSDictionary *)obj) convertToKeyFirstCharUpperDictionary];
@@ -116,7 +116,7 @@
     NSMutableDictionary *dic = [NSMutableDictionary dictionary];
     for (NSString *key in self.allKeys) {
         
-        id obj = dic[key];
+        id obj = self[key];
         
         if ([obj isKindOfClass:[NSDictionary class]]) {
             obj = [((NSDictionary *)obj) convertToKeyFirstCharLowerDictionary];
