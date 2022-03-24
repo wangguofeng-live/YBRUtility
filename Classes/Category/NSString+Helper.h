@@ -40,6 +40,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (BOOL)isAllNumber;
 
+- (BOOL)isPureInt;
+
 @end
 
 #pragma mark - string size
@@ -81,6 +83,33 @@ NS_ASSUME_NONNULL_BEGIN
 #pragma json check
 ///初步判断是否为JSON String
 + (BOOL)isJsonStringFast:(NSString *)jsonString;
+
+@end
+
+@interface NSString (URL)
+
+- (NSURL *)converToURL;
+
+@end
+
+@interface NSString (FirstChar)
+
+/**
+ *  驼峰转下划线（loveYou -> love_you）
+ */
+- (NSString *)ybr_underlineFromCamel;
+/**
+ *  下划线转驼峰（love_you -> loveYou）
+ */
+- (NSString *)ybr_camelFromUnderline;
+/**
+ * 首字母变大写
+ */
+- (NSString *)ybr_firstCharUpper;
+/**
+ * 首字母变小写
+ */
+- (NSString *)ybr_firstCharLower;
 
 @end
 

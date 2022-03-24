@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
+
 @interface NSDictionary (YBRDictionary)
 
 - (nonnull id)objectForKeyCheckStr:(nullable id)aKey;
@@ -34,5 +35,15 @@
 + (NSString *_Nullable)arrayToJSONString:(nullable NSArray *)array;
 
 + (NSString *_Nullable)convertToJsonData:(nullable NSDictionary *)dict;
+
+@end
+
+@interface NSDictionary (KeyFirstChar)
+
+///转化所有Key的首字母改为大写的 Dic
+- (NSDictionary * _Nonnull)convertToKeyFirstCharUpperDictionary;
+
+///转化所有Key的首字母改为小写的 Dic
+- (NSDictionary *_Nonnull)convertToKeyFirstCharLowerDictionary;
 
 @end
