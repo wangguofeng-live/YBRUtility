@@ -104,11 +104,34 @@
         
         if ([obj isKindOfClass:[NSDictionary class]]) {
             obj = [((NSDictionary *)obj) convertToKeyFirstCharUpperDictionary];
+        }if ([obj isKindOfClass:[NSArray class]]) {
+            obj = [self _convertToKeyFirstCharUpperDictionaryOfArray:obj];
         }
         
         [dic setObject:obj forKey:[key ybr_firstCharUpper]];
     }
     return dic.copy;
+}
+
+- (NSArray *)_convertToKeyFirstCharUpperDictionaryOfArray:(NSArray *)array {
+    
+    if (![array isKindOfClass:[NSArray class]]) return array;
+    
+    NSMutableArray *_arr = [[NSMutableArray alloc] initWithCapacity:array.count];
+    for (id item in array) {
+        
+        id obj = nil;
+        if ([item isKindOfClass:[NSDictionary class]]) {
+            obj = [((NSDictionary *)item) convertToKeyFirstCharUpperDictionary];
+        }else if ([item isKindOfClass:[NSArray class]]) {
+            obj = [self _convertToKeyFirstCharUpperDictionaryOfArray:item];
+        }else {
+            obj = item;
+        }
+        
+        [_arr addObject:obj];
+    }
+    return _arr.copy;
 }
 
 ///转化所有Key的首字母改为小写的 Dic
@@ -120,11 +143,34 @@
         
         if ([obj isKindOfClass:[NSDictionary class]]) {
             obj = [((NSDictionary *)obj) convertToKeyFirstCharLowerDictionary];
+        }if ([obj isKindOfClass:[NSArray class]]) {
+            obj = [self _convertToKeyFirstCharLowerDictionaryOfArray:obj];
         }
         
         [dic setObject:obj forKey:[key ybr_firstCharLower]];
     }
     return dic.copy;
+}
+
+- (NSArray *)_convertToKeyFirstCharLowerDictionaryOfArray:(NSArray *)array {
+    
+    if (![array isKindOfClass:[NSArray class]]) return array;
+    
+    NSMutableArray *_arr = [[NSMutableArray alloc] initWithCapacity:array.count];
+    for (id item in array) {
+        
+        id obj = nil;
+        if ([item isKindOfClass:[NSDictionary class]]) {
+            obj = [((NSDictionary *)item) convertToKeyFirstCharLowerDictionary];
+        }else if ([item isKindOfClass:[NSArray class]]) {
+            obj = [self _convertToKeyFirstCharLowerDictionaryOfArray:item];
+        }else {
+            obj = item;
+        }
+        
+        [_arr addObject:obj];
+    }
+    return _arr.copy;
 }
 
 @end
