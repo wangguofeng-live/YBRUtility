@@ -8,16 +8,19 @@
 
 #import "UIColor+YBRTools.h"
 
-@interface NSString (MadeInChinaPrivate)
+@interface NSString (UIColor_YBRTools)
 - (int)_hexValue;
 @end
 
-@implementation NSString (MadeInChinaPrivate)
-- (int)_hexValue {
-    int result = 0;
-    sscanf([self UTF8String], "%x", &result);
-    return result;
+@implementation NSString (UIColor_YBRTools)
+
+- (unsigned int)_hexValue {
+    NSScanner * scanner = [NSScanner scannerWithString:self];
+    unsigned int hexValue;
+    [scanner scanHexInt:&hexValue];
+    return hexValue;
 }
+
 @end
 
 @implementation UIColor (YBRTools)
