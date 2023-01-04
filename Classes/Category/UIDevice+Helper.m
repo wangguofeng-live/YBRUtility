@@ -10,15 +10,19 @@
 
 @implementation UIDevice (Helper)
 
-+ (NSString*)iphoneType
-{
++ (NSString*)iphoneType {
     static NSString *deviceString = nil;
     if (deviceString != nil) return deviceString;
-    
+    deviceString = [self _iphoneType];
+    return deviceString;
+}
+
++ (NSString*)_iphoneType
+{
     //需要导入头文件：#import <sys/utsname.h>
     struct utsname systemInfo;
     uname(&systemInfo);
-    deviceString = [NSString stringWithCString:systemInfo.machine encoding:NSUTF8StringEncoding];
+    NSString *deviceString = [NSString stringWithCString:systemInfo.machine encoding:NSUTF8StringEncoding];
     
     if([deviceString isEqualToString:@"iPhone3,1"])
         return @"iPhone 4";
