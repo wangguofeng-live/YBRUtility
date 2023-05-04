@@ -134,6 +134,15 @@
     return returnValue;
 }
 
++ (NSString *)firstLineOfString:(NSString *)text {
+    NSRange range = [text rangeOfCharacterFromSet:[NSCharacterSet newlineCharacterSet]];
+    if (range.location != NSNotFound) {
+        return [text substringToIndex:range.location];
+    } else {
+        return text;
+    }
+}
+
 @end
 
 

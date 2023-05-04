@@ -34,6 +34,9 @@ NS_ASSUME_NONNULL_BEGIN
 ///判断是否有系统表情
 + (BOOL)stringContainsEmoji:(NSString * _Nullable)string;
 
+///获取文本第一行
++ (NSString *)firstLineOfString:(NSString *)text;
+
 @end
 
 @interface NSString (CheckNumber)
