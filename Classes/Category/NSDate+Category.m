@@ -12,7 +12,26 @@
 #define CURRENT_CALENDAR [NSCalendar currentCalendar]
 
 @implementation NSDate (Category)
- 
+
+/*距离当前的时间间隔描述*/
+- (NSString *)timeIntervalDescription
+{
+    NSTimeInterval timeInterval = -[self timeIntervalSinceNow];
+    if (timeInterval < 60) {
+        return NSLocalizedString(@"NSDateCategory.text1", @"");
+    } else if (timeInterval < 3600) {
+        return [NSString stringWithFormat:NSLocalizedString(@"NSDateCategory.text2", @""), timeInterval / 60];
+    } else if (timeInterval < 86400) {
+        return [NSString stringWithFormat:NSLocalizedString(@"NSDateCategory.text3", @""), timeInterval / 3600];
+    } else if (timeInterval < 2592000) {//30天内
+        return [NSString stringWithFormat:NSLocalizedString(@"NSDateCategory.text4", @""), timeInterval / 86400];
+    } else if (timeInterval < 31536000) {//30天至1年内
+        NSDateFormatter *dateFormatter = [NSDateFormatter dateFormatterWithFormat:NSLocalizedString(@"NSDateCategory.text5", @"")];
+        return [dateFormatter stringFromDate:self];
+    } else {
+        return [NSString stringWithFormat:NSLocalizedString(@"NSDateCategory.text6", @""), timeInterval / 31536000];
+    }
+}
 
 /*精确到分钟的日期描述*/
 - (NSString *)minuteDescription
@@ -39,7 +58,7 @@
 /*标准时间日期描述*/
 -(NSString *)formattedTime{
     NSDateFormatter* formatter = [[NSDateFormatter alloc]init];
-    [formatter setDateFormat:@"yyyy-MM-dd"];
+    [formatter setDateFormat:@"YYYY-MM-dd"];
     NSString * dateNow = [formatter stringFromDate:[NSDate date]];
     NSDateComponents *components = [[NSDateComponents alloc] init];
     [components setDay:[[dateNow substringWithRange:NSMakeRange(8,2)] intValue]];
@@ -131,7 +150,11 @@
     
     return ret;
 }
-  
+
++ (NSString *)formattedTimeFromTimeInterval:(long long)time{
+    return [[NSDate dateWithTimeIntervalInMilliSecondSince1970:time] formattedTime];
+}
+
 #pragma mark Relative Dates
 
 + (NSDate *) dateWithDaysFromNow: (NSInteger) days
@@ -155,7 +178,34 @@
 {
     return [NSDate dateWithDaysBeforeNow:1];
 }
-   
+
++ (NSDate *) dateWithHoursFromNow: (NSInteger) dHours
+{
+    NSTimeInterval aTimeInterval = [[NSDate date] timeIntervalSinceReferenceDate] + D_HOUR * dHours;
+    NSDate *newDate = [NSDate dateWithTimeIntervalSinceReferenceDate:aTimeInterval];
+    return newDate;
+}
+
++ (NSDate *) dateWithHoursBeforeNow: (NSInteger) dHours
+{
+    NSTimeInterval aTimeInterval = [[NSDate date] timeIntervalSinceReferenceDate] - D_HOUR * dHours;
+    NSDate *newDate = [NSDate dateWithTimeIntervalSinceReferenceDate:aTimeInterval];
+    return newDate;
+}
+
++ (NSDate *) dateWithMinutesFromNow: (NSInteger) dMinutes
+{
+    NSTimeInterval aTimeInterval = [[NSDate date] timeIntervalSinceReferenceDate] + D_MINUTE * dMinutes;
+    NSDate *newDate = [NSDate dateWithTimeIntervalSinceReferenceDate:aTimeInterval];
+    return newDate;
+}
+
++ (NSDate *) dateWithMinutesBeforeNow: (NSInteger) dMinutes
+{
+    NSTimeInterval aTimeInterval = [[NSDate date] timeIntervalSinceReferenceDate] - D_MINUTE * dMinutes;
+    NSDate *newDate = [NSDate dateWithTimeIntervalSinceReferenceDate:aTimeInterval];
+    return newDate;
+}
  
 + (NSMutableArray *) dateForCurrentDay: (NSInteger) allDay
 {
@@ -186,8 +236,19 @@
        
         return needArr;
 }
-          
- 
+                                                            
+- (NSInteger)weekdayStringWithDate:(NSDate *)date {
+    //获取星期几
+    NSDateComponents *componets = [[NSCalendar autoupdatingCurrentCalendar] components:NSCalendarUnitWeekday fromDate:date];
+    NSInteger weekday = [componets weekday];//1代表星期日，2代表星期一，后面依次
+//    NSArray *weekArray = @[@"星期日",@"星期一",@"星期二",@"星期三",@"星期四",@"星期五",@"星期六"];
+//    NSString *weekStr = weekArray[weekday-1];
+    return weekday-1;
+}
+                                                            
+
+             
+
 #pragma mark Comparing Dates
 
 - (BOOL) isEqualToDateIgnoringTime: (NSDate *) aDate
@@ -208,7 +269,11 @@
 {
     return [self isEqualToDateIgnoringTime:[NSDate dateTomorrow]];
 }
- 
+
+- (BOOL) isYesterday
+{
+    return [self isEqualToDateIgnoringTime:[NSDate dateYesterday]];
+}
 
 // This hard codes the assumption that a week is 7 days
 - (BOOL) isSameWeekAsDate: (NSDate *) aDate
@@ -227,7 +292,14 @@
 {
     return [self isSameWeekAsDate:[NSDate date]];
 }
- 
+
+- (BOOL) isNextWeek
+{
+    NSTimeInterval aTimeInterval = [[NSDate date] timeIntervalSinceReferenceDate] + D_WEEK;
+    NSDate *newDate = [NSDate dateWithTimeIntervalSinceReferenceDate:aTimeInterval];
+    return [self isSameWeekAsDate:newDate];
+}
+
 - (BOOL) isLastWeek
 {
     NSTimeInterval aTimeInterval = [[NSDate date] timeIntervalSinceReferenceDate] - D_WEEK;
@@ -261,20 +333,45 @@
     return [self isSameOnlyMonthAsDate:[NSDate date]];
 }
 
-
 - (BOOL) isSameYearAsDate: (NSDate *) aDate
 {
     NSDateComponents *components1 = [CURRENT_CALENDAR components:NSCalendarUnitYear fromDate:self];
     NSDateComponents *components2 = [CURRENT_CALENDAR components:NSCalendarUnitYear fromDate:aDate];
     return (components1.year == components2.year);
 }
-   
-  
+
+- (BOOL) isThisYear
+{
+    // Thanks, baspellis
+    return [self isSameYearAsDate:[NSDate date]];
+}
+
+- (BOOL) isNextYear
+{
+    NSDateComponents *components1 = [CURRENT_CALENDAR components:NSCalendarUnitYear fromDate:self];
+    NSDateComponents *components2 = [CURRENT_CALENDAR components:NSCalendarUnitYear fromDate:[NSDate date]];
+    
+    return (components1.year == (components2.year + 1));
+}
+
+- (BOOL) isLastYear
+{
+    NSDateComponents *components1 = [CURRENT_CALENDAR components:NSCalendarUnitYear fromDate:self];
+    NSDateComponents *components2 = [CURRENT_CALENDAR components:NSCalendarUnitYear fromDate:[NSDate date]];
+    
+    return (components1.year == (components2.year - 1));
+}
+
 - (BOOL) isEarlierThanDate: (NSDate *) aDate
 {
     return ([self compare:aDate] == NSOrderedAscending);
 }
-  
+ 
+- (BOOL) isEarlierAndSameThanDate: (NSDate *) aDate
+{
+    NSComparisonResult resultComp = [self compare:aDate];
+    return (resultComp == NSOrderedAscending || resultComp == NSOrderedSame);
+}
 
 - (BOOL) isLaterThanDate: (NSDate *) aDate
 {
@@ -303,7 +400,11 @@
         return YES;
     return NO;
 }
- 
+
+- (BOOL) isTypicallyWorkday
+{
+    return ![self isTypicallyWeekend];
+}
 
 #pragma mark Adjusting Dates
 
@@ -337,7 +438,23 @@
     NSDate *newDate = [NSDate dateWithTimeIntervalSinceReferenceDate:aTimeInterval];
     return newDate;
 }
- 
+
+- (NSDate *) dateBySubtractingMinutes: (NSInteger) dMinutes
+{
+    return [self dateByAddingMinutes: (dMinutes * -1)];
+}
+
+- (NSDate *) dateByAddingYears: (NSInteger) dYears
+{
+    NSTimeInterval aTimeInterval = [self timeIntervalSinceReferenceDate] + D_YEAR * dYears;
+    NSDate *newDate = [NSDate dateWithTimeIntervalSinceReferenceDate:aTimeInterval];
+    return newDate;
+}
+
+- (NSDate *) dateBySubtractingYears: (NSInteger) dYears
+{
+    return [self dateByAddingYears: (dYears * -1)];
+}
 
 - (NSDate *) dateAtStartOfDay
 {
@@ -347,7 +464,12 @@
     components.second = 0;
     return [CURRENT_CALENDAR dateFromComponents:components];
 }
- 
+
+- (NSDateComponents *) componentsWithOffsetFromDate: (NSDate *) aDate
+{
+    NSDateComponents *dTime = [CURRENT_CALENDAR components:DATE_COMPONENTS fromDate:aDate toDate:self options:0];
+    return dTime;
+}
 
 #pragma mark Retrieving Intervals
 
@@ -368,21 +490,43 @@
     NSTimeInterval ti = [self timeIntervalSinceDate:aDate];
     return (NSInteger) (ti / D_HOUR);
 }
- 
- 
-- (NSInteger) daysBeforeDate: (NSDate *) aDate
+
+- (NSInteger) hoursBeforeDate: (NSDate *) aDate
 {
-    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-    [dateFormatter setDateFormat:@"yyyy-MM-dd"];
-    // 时分秒转为00:00:00
-    NSDate *newADate = [dateFormatter dateFromString:[dateFormatter stringFromDate:aDate]];
-    NSTimeInterval ti = [newADate timeIntervalSinceDate:self];
+    NSTimeInterval ti = [aDate timeIntervalSinceDate:self];
+    return (NSInteger) (ti / D_HOUR);
+}
+
+- (NSInteger) daysAfterDate: (NSDate *) aDate
+{
+    NSTimeInterval ti = [self timeIntervalSinceDate:aDate];
     return (NSInteger) (ti / D_DAY);
 }
- 
+
+- (NSInteger) daysBeforeDate: (NSDate *) aDate
+{
+    NSTimeInterval ti = [aDate timeIntervalSinceDate:self];
+    return (NSInteger) (ti / D_DAY);
+}
+
+// Thanks, dmitrydims
+// I have not yet thoroughly tested this
+- (NSInteger)distanceInDaysToDate:(NSDate *)anotherDate
+{
+    NSCalendar *gregorianCalendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSCalendarIdentifierGregorian];
+    NSDateComponents *components = [gregorianCalendar components:NSCalendarUnitDay fromDate:self toDate:anotherDate options:0];
+    return components.day;
+}
  
 #pragma mark Decomposing Dates
 
+- (NSInteger) nearestHour
+{
+    NSTimeInterval aTimeInterval = [[NSDate date] timeIntervalSinceReferenceDate] + D_MINUTE * 30;
+    NSDate *newDate = [NSDate dateWithTimeIntervalSinceReferenceDate:aTimeInterval];
+    NSDateComponents *components = [CURRENT_CALENDAR components:NSCalendarUnitHour fromDate:newDate];
+    return components.hour;
+}
 
 - (NSInteger) hour
 {
@@ -425,7 +569,12 @@
     NSDateComponents *components = [CURRENT_CALENDAR components:DATE_COMPONENTS fromDate:self];
     return components.weekday;
 }
- 
+
+- (NSInteger) nthWeekday // e.g. 2nd Tuesday of the month is 2
+{
+    NSDateComponents *components = [CURRENT_CALENDAR components:DATE_COMPONENTS fromDate:self];
+    return components.weekdayOrdinal;
+}
 
 - (NSInteger) year
 {
