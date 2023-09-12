@@ -24,6 +24,11 @@
     [[YBREventsManager sharedInstance] subscribeEvent:eventName object:object selector:selector];
 }
 
+//订阅事件（block）
+- (void)subscribeEvent:(NSString *)eventName object:(id)object block:(void (^)(id event))block {
+    [[YBREventsManager sharedInstance] subscribeEvent:eventName object:object block:block];
+}
+
 //发布事件
 - (void)fireEvent:(NSString *)eventName {
     [[YBREventsManager sharedInstance] fireEvent:eventName];

@@ -17,6 +17,7 @@
 #define YBRAnimationDuration        GlobalConst.YBRAnimationDuration
 #define YBRUI_SCALE                 GlobalConst.YBRUI_SCALE
 #define YBRUI_SCALE_375             GlobalConst.YBRUI_SCALE_375
+#define YBRUI_SCALE_768             GlobalConst.YBRUI_SCALE_768
 
 #define YBRTopHeight                GlobalConst.YBRTopHeight
 #define YBRStatusBarHeight          GlobalConst.YBRStatusBarHeight

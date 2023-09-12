@@ -37,9 +37,14 @@
     return __singleton__;
 }
 
-//订阅事件
+//订阅事件（selector）
 - (void)subscribeEvent:(NSString *)eventName object:(id)object selector:(SEL)selector {
     [self _subscribeEventEvent:eventName object:object selector:selector];
+}
+
+//订阅事件（block）
+- (void)subscribeEvent:(NSString *)eventName object:(id)object block:(nonnull void (^)(id _Nonnull))block {
+    [self _subscribeEventEvent:eventName object:object block:block];
 }
 
 //发布事件
@@ -73,15 +78,31 @@
         NSArray *selectorList = [eventNameDict objectForKey:eventName];
         
         //3.遍历SelectorList
-        for (NSString *sel in selectorList) {
-            //4.检查object的实现，并执行
-            SEL selector = NSSelectorFromString(sel);
-            if ([object respondsToSelector:selector]) {
+        for (id action in selectorList) {
+            //4.检查类型
+            if ([action isKindOfClass:[NSString class]]) {
+                NSString *sel = action;
+                
+                //5.1 检查object的实现，并执行
+                SEL selector = NSSelectorFromString(sel);
+                if ([object respondsToSelector:selector]) {
+                    YBREvent *event = [YBREvent new];
+                    event.eventName = eventName;
+                    event.params = params;
+                    CancelPerformSelectorLeakWarning ([object performSelector:selector withObject:event];);
+                }
+                
+            }else {
+                void (^block)(id event) = action;
+                
+                //5.2 检查object的实现，并执行
                 YBREvent *event = [YBREvent new];
                 event.eventName = eventName;
                 event.params = params;
-                CancelPerformSelectorLeakWarning ([object performSelector:selector withObject:event];);
+                block(event);
+                
             }
+            
         }
 
     }
@@ -90,7 +111,7 @@
 
 #pragma mark - eventMap 操作
 
-///订阅事件
+///订阅事件（selector）
 - (void)_subscribeEventEvent:(NSString *)eventName object:(id)object selector:(SEL)selector {
     if (eventName == nil) return;
     if (object == nil) return;
@@ -115,6 +136,31 @@
     if (![selectorList containsObject:sel]) {
         [selectorList addObject:sel];
     }
+    
+}
+
+///订阅事件（block）
+- (void)_subscribeEventEvent:(NSString *)eventName object:(id)object block:(void (^)(id event))block {
+    if (eventName == nil) return;
+    if (object == nil) return;
+    if (block == nil) return;
+    
+    //1.准备 EventNameDict
+    NSMutableDictionary *eventNameDict = [self.eventMap objectForKey:object];
+    if (nil == eventNameDict) {
+        eventNameDict = [NSMutableDictionary dictionary];
+        [self.eventMap setObject:eventNameDict forKey:object];
+    }
+    
+    //2.准备 SelectorList
+    NSMutableArray *selectorList = [eventNameDict objectForKey:eventName];
+    if (nil == selectorList) {
+        selectorList = [NSMutableArray array];
+        [eventNameDict setObject:selectorList forKey:eventName];
+    }
+    
+    //3.添加 block
+    [selectorList addObject:block];
     
 }
 

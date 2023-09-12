@@ -13,8 +13,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (instancetype)sharedInstance;
 
-///订阅事件
+///订阅事件（selector）
 - (void)subscribeEvent:(NSString *)eventName object:(id)object selector:(SEL)selector;
+///订阅事件（block）
+- (void)subscribeEvent:(NSString *)eventName object:(id)object block:(void (^)(id event))block;
 
 ///发布事件
 - (void)fireEvent:(NSString *)eventName;
