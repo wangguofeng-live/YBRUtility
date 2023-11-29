@@ -38,25 +38,30 @@
 
 +(instancetype)hook_URLWithString:(NSString *)URLString {
     
-    static NSCharacterSet *charSet = nil;
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        NSMutableCharacterSet *mutableCharSet = [[NSMutableCharacterSet alloc] init];
-        [mutableCharSet formUnionWithCharacterSet:[NSCharacterSet letterCharacterSet]];
-        [mutableCharSet addCharactersInString:@",.:/=?&%#+-_()"];
-        [mutableCharSet addCharactersInString:@"0123456789"];
-        charSet = mutableCharSet.copy;
-    });
-    
-    // 两个方法实现已经调换了，所以这里要调用hook_URLWithString，如果调用URLWithString的会造成递归
-//    NSString *urlM = [URLString stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-    NSString *urlM = [URLString stringByAddingPercentEncodingWithAllowedCharacters:charSet];
-    NSURL *url = [NSURL hook_URLWithString:urlM];
-    if (!url) {
-        NSLog(@"url为nil");
+    if (@available(iOS 17.0, *)) {
+        return [self hook_URLWithString:URLString];;
+    } else {
+        
+        static NSCharacterSet *charSet = nil;
+        static dispatch_once_t onceToken;
+        dispatch_once(&onceToken, ^{
+            NSMutableCharacterSet *mutableCharSet = [[NSMutableCharacterSet alloc] init];
+            [mutableCharSet formUnionWithCharacterSet:[NSCharacterSet letterCharacterSet]];
+            [mutableCharSet addCharactersInString:@",.:/=?&%#+-_()"];
+            [mutableCharSet addCharactersInString:@"0123456789"];
+            charSet = mutableCharSet.copy;
+        });
+        
+        // 两个方法实现已经调换了，所以这里要调用hook_URLWithString，如果调用URLWithString的会造成递归
+        //    NSString *urlM = [URLString stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+        NSString *urlM = [URLString stringByAddingPercentEncodingWithAllowedCharacters:charSet];
+        NSURL *url = [NSURL hook_URLWithString:urlM];
+        if (!url) {
+            NSLog(@"url为nil");
+        }
+        
+        return url;
     }
-    
-    return url;
 }
 
 @end
