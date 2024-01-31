@@ -29,6 +29,11 @@
     [[YBREventsManager sharedInstance] subscribeEvent:eventName object:object block:block];
 }
 
+///取消订阅事件
+- (void)unsubscribeEvent:(NSString *)eventName object:(id)object {
+    [[YBREventsManager sharedInstance] unsubscribeEvent:eventName object:object];
+}
+
 //发布事件
 - (void)fireEvent:(NSString *)eventName {
     [[YBREventsManager sharedInstance] fireEvent:eventName];

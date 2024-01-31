@@ -18,6 +18,9 @@ NS_ASSUME_NONNULL_BEGIN
 ///订阅事件（block）
 - (void)subscribeEvent:(NSString *)eventName object:(id)object block:(void (^)(id event))block;
 
+///取消订阅事件
+- (void)unsubscribeEvent:(NSString *)eventName object:(id)object;
+
 ///发布事件
 - (void)fireEvent:(NSString *)eventName;
 - (void)fireEvent:(NSString *)eventName module:moduleId;

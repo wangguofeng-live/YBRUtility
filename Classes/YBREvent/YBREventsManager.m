@@ -47,6 +47,11 @@
     [self _subscribeEventEvent:eventName object:object block:block];
 }
 
+//取消订阅事件
+- (void)unsubscribeEvent:(NSString *)eventName object:(id)object {
+    [self _unsubscribeEventEvent:eventName object:object];
+}
+
 //发布事件
 - (void)fireEvent:(NSString *)eventName {
     [self fireEvent:eventName module:nil params:nil];
@@ -161,6 +166,25 @@
     
     //3.添加 block
     [selectorList addObject:block];
+    
+}
+
+///取消订阅事件
+- (void)_unsubscribeEventEvent:(NSString *)eventName object:(id)object {
+    if (eventName == nil) return;
+    if (object == nil) return;
+    
+    [self.eventMap removeObjectForKey:object];
+    
+    //1.准备 EventNameDict
+    NSMutableDictionary *eventNameDict = [self.eventMap objectForKey:object];
+    if (nil == eventNameDict) {
+        eventNameDict = [NSMutableDictionary dictionary];
+        [self.eventMap setObject:eventNameDict forKey:object];
+    }
+    
+    //2.移除 EventName
+    [eventNameDict removeObjectForKey:eventName];
     
 }
 
